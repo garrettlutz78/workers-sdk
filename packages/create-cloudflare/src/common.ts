@@ -27,7 +27,6 @@ import { detectPackageManager } from "helpers/packages";
 import { poll } from "helpers/poll";
 import { version as wranglerVersion } from "wrangler/package.json";
 import { version } from "../package.json";
-import * as shellquote from "./helpers/shell-quote";
 import type { C3Args, PagesGeneratorContext } from "types";
 
 const { name, npm } = detectPackageManager();
@@ -192,7 +191,7 @@ export const runDeploy = async (ctx: PagesGeneratorContext) => {
 		env: { CLOUDFLARE_ACCOUNT_ID: ctx.account.id, NODE_ENV: "production" },
 		startText: "Deploying your application",
 		doneText: `${brandColor("deployed")} ${dim(
-			`via \`${shellquote.quote(baseDeployCmd)}\``
+			`via \`${baseDeployCmd.join(" ")}\``
 		)}`,
 	});
 
@@ -254,7 +253,7 @@ export const printSummary = async (ctx: PagesGeneratorContext) => {
 	const nextSteps = [
 		[
 			`Navigate to the new directory`,
-			`cd ${shellquote.quote([relative(ctx.originalCWD, ctx.project.path)])}`,
+			`cd ${relative(ctx.originalCWD, ctx.project.path)}`,
 		],
 		[
 			`Run the development server`,
@@ -378,7 +377,10 @@ export const gitCommit = async (ctx: PagesGeneratorContext) => {
 	await runCommands({
 		silent: true,
 		cwd: ctx.project.path,
-		commands: ["git add .", ["git", "commit", "-m", commitMessage]],
+		commands: [
+			["git", "add", "."],
+			["git", "commit", "-m", commitMessage],
+		],
 		startText: "Committing new files",
 		doneText: `${brandColor("git")} ${dim(`commit`)}`,
 	});
@@ -431,7 +433,7 @@ const createCommitMessage = async (ctx: PagesGeneratorContext) => {
  */
 async function getGitVersion() {
 	try {
-		const rawGitVersion = await runCommand("git --version", {
+		const rawGitVersion = await runCommand(["git", "--version"], {
 			useSpinner: false,
 			silent: true,
 		});
@@ -452,13 +454,13 @@ export async function isGitInstalled() {
 
 export async function isGitConfigured() {
 	try {
-		const userName = await runCommand("git config user.name", {
+		const userName = await runCommand(["git", "config", "user.name"], {
 			useSpinner: false,
 			silent: true,
 		});
 		if (!userName) return false;
 
-		const email = await runCommand("git config user.email", {
+		const email = await runCommand(["git", "config", "user.email"], {
 			useSpinner: false,
 			silent: true,
 		});
@@ -476,7 +478,7 @@ export async function isGitConfigured() {
  */
 export async function isInsideGitRepo(cwd: string) {
 	try {
-		const output = await runCommand("git status", {
+		const output = await runCommand(["git", "status"], {
 			cwd,
 			useSpinner: false,
 			silent: true,
@@ -499,18 +501,18 @@ export async function initializeGit(cwd: string) {
 	try {
 		// Get the default init branch name
 		const defaultBranchName = await runCommand(
-			"git config --get init.defaultBranch",
+			["git", "config", "--get", "init.defaultBranch"],
 			{ useSpinner: false, silent: true, cwd }
 		);
 
 		// Try to create the repository with the HEAD branch of defaultBranchName ?? `main`.
 		await runCommand(
-			`git init --initial-branch ${defaultBranchName.trim() ?? "main"}`, // branch names can't contain spaces, so this is safe
+			["git", "init", "--initial-branch", defaultBranchName.trim() ?? "main"], // branch names can't contain spaces, so this is safe
 			{ useSpinner: false, silent: true, cwd }
 		);
 	} catch {
 		// Unable to create the repo with a HEAD branch name, so just fall back to the default.
-		await runCommand(`git init`, { useSpinner: false, silent: true, cwd });
+		await runCommand(["git", "init"], { useSpinner: false, silent: true, cwd });
 	}
 }
 
@@ -518,7 +520,7 @@ export async function getProductionBranch(cwd: string) {
 	try {
 		const productionBranch = await runCommand(
 			// "git branch --show-current", // git@^2.22
-			"git rev-parse --abbrev-ref HEAD", // git@^1.6.3
+			["git", "rev-parse", "--abbrev-ref", "HEAD"], // git@^1.6.3
 			{
 				silent: true,
 				cwd,

@@ -237,6 +237,13 @@ export const testDeploymentCommitMessage = async (
 	expect(projectLatestCommitMessage).toMatch(
 		/Initialize web application via create-cloudflare CLI/
 	);
+	if (
+		projectLatestCommitMessage &&
+		!projectLatestCommitMessage.includes(`C3 = create-cloudflare@${version}`)
+	) {
+		console.error(projectLatestCommitMessage);
+		throw Error(projectLatestCommitMessage);
+	}
 	expect(projectLatestCommitMessage).toContain(
 		`C3 = create-cloudflare@${version}`
 	);

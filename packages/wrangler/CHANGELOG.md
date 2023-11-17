@@ -1,5 +1,11 @@
 # wrangler
 
+## 3.16.1
+
+### Patch Changes
+
+- [#4455](https://github.com/cloudflare/workers-sdk/pull/4455) [`1747d215`](https://github.com/cloudflare/workers-sdk/commit/1747d215e7113909edf0596e713b808024c36c70) Thanks [@rozenmd](https://github.com/rozenmd)! - fix: make it possible to ignore hyperdrive warnings
+
 ## 3.16.0
 
 ### Minor Changes

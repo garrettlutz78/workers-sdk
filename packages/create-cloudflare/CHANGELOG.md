@@ -1,5 +1,11 @@
 # create-cloudflare
 
+## 2.7.1
+
+### Patch Changes
+
+- [#4441](https://github.com/cloudflare/workers-sdk/pull/4441) [`01d34f21`](https://github.com/cloudflare/workers-sdk/commit/01d34f2139929fc58d0d3c799d4e120e74bdd409) Thanks [@dependabot](https://github.com/apps/dependabot)! - C3: Bumped `create-svelte` from `5.1.1` to `5.2.0`
+
 ## 2.7.0
 
 ### Minor Changes

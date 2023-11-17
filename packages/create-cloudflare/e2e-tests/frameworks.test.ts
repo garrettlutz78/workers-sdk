@@ -23,6 +23,7 @@ type FrameworkTestConfig = Omit<RunnerConfig, "ctx"> & {
 	testCommitMessage: boolean;
 	timeout?: number;
 	unsupportedPms?: string[];
+	unsupportedOSs?: string[];
 };
 
 describe.concurrent(`E2E: Web frameworks`, () => {
@@ -31,6 +32,7 @@ describe.concurrent(`E2E: Web frameworks`, () => {
 		astro: {
 			expectResponseToContain: "Hello, Astronaut!",
 			testCommitMessage: true,
+			unsupportedOSs: ["win32"],
 		},
 		docusaurus: {
 			expectResponseToContain: "Dinosaurs are cool",
@@ -41,6 +43,7 @@ describe.concurrent(`E2E: Web frameworks`, () => {
 		angular: {
 			expectResponseToContain: "Congratulations! Your app is running.",
 			testCommitMessage: true,
+			unsupportedOSs: ["win32"],
 		},
 		gatsby: {
 			expectResponseToContain: "Gatsby!",
@@ -67,6 +70,7 @@ describe.concurrent(`E2E: Web frameworks`, () => {
 				},
 			],
 			testCommitMessage: true,
+			unsupportedOSs: ["win32"],
 		},
 		remix: {
 			expectResponseToContain: "Welcome to Remix",
@@ -127,6 +131,7 @@ describe.concurrent(`E2E: Web frameworks`, () => {
 				},
 			],
 			testCommitMessage: true,
+			unsupportedOSs: ["win32"],
 		},
 		vue: {
 			expectResponseToContain: "Vite App",
@@ -238,8 +243,13 @@ describe.concurrent(`E2E: Web frameworks`, () => {
 	};
 
 	Object.keys(frameworkTests).forEach((framework) => {
-		const { quarantine, timeout, testCommitMessage, unsupportedPms } =
-			frameworkTests[framework];
+		const {
+			quarantine,
+			timeout,
+			testCommitMessage,
+			unsupportedPms,
+			unsupportedOSs,
+		} = frameworkTests[framework];
 
 		const quarantineModeMatch = isQuarantineMode() == (quarantine ?? false);
 
@@ -252,6 +262,8 @@ describe.concurrent(`E2E: Web frameworks`, () => {
 
 		// Skip if the package manager is unsupported
 		shouldRun &&= !unsupportedPms?.includes(process.env.TEST_PM ?? "");
+		// Skip is the OS is unsupported
+		shouldRun &&= !unsupportedOSs?.includes(process.platform);
 		test.runIf(shouldRun)(
 			framework,
 			async (ctx) => {

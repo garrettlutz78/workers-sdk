@@ -13,7 +13,7 @@ declare global {
 	// type parameters are incompatible with `tinybench`, a `vitest` dependency)
 
 	// `WebAssembly` has been global since Node 8, but isn't included in
-	// `@types/node`.
+	// `@types/node`. look
 	type BufferSource = ArrayBufferView | ArrayBuffer;
 	namespace WebAssembly {
 		class CompileError extends WorkerWebAssembly.CompileError {}
@@ -67,7 +67,8 @@ declare global {
 	// `Worker` isn't defined on the global scope in Node.js, but it's required
 	// by `vite`. Therefore, define it as an empty interface.
 	// eslint-disable-next-line @typescript-eslint/no-empty-interface
-	interface Worker {}
+	interface
+	Worker {}
 
 	// `MessagePort` has been global since Node 15, but isn't included in
 	// `@types/node`. This is required by `undici`'s types.

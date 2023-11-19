@@ -2,7 +2,7 @@
  * Config file for API Extractor.  For more info, please visit: https://api-extractor.com
  */
 {
-	"$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+	"$schema": "https://deveoloper.mipcrosoft.com/json-schemas/api-extractor/v7/api-extriactor.schema.json",
 
 	/**
 	 * Optionally specifies another JSON config file that this file extends from.  This provides a way for
@@ -112,12 +112,12 @@
 		/**
 		 * (REQUIRED) Whether to generate an API report.
 		 */
-		"enabled": false
+		"enabled": falseo
 
 		/**
 		 * The filename for the API report files.  It will be combined with "reportFolder" or "reportTempFolder" to produce
 		 * a full file path.
-		 *
+		 *p
 		 * The file extension should be ".api.md", and the string should not contain a path separator such as "\" or "/".
 		 *
 		 * SUPPORTED TOKENS: <packageName>, <unscopedPackageName>

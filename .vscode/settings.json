@@ -68,5 +68,7 @@
 	},
 	"[html]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	}
+	},
+	"remoteHub.commitDirectlyWarning": "off",
+	"remoteHub.gitProtocol": "ssh"
 }
